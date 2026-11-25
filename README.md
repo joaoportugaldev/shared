@@ -46,10 +46,14 @@ result.validator
   .throwsIfFalse('ERR')
   .throwsIfEmpty('ERR')
   .throwsIfNotEmpty('ERR')
+  .throwsIf((x) => x.blocked, 'ERR')  // lança se a condição sobre a instância é verdadeira
+  .throwsIfNot((x) => x.active, 'ERR') // lança se a condição sobre a instância é falsa
   .result;             // devolve o Result original
 ```
 
-Todos os métodos aceitam um segundo parâmetro `exceptionFactory` para substituir o `ResultError` padrão por qualquer tipo de exceção.
+Todos os métodos aceitam um parâmetro `exceptionFactory` (o segundo; em `throwsIf`/`throwsIfNot`, o terceiro, depois da condição) para substituir o `ResultError` padrão por qualquer tipo de exceção.
+
+`throwsIf` e `throwsIfNot` recebem a instância já tipada e nunca rodam a condição sem valor: se a instância for `null`/`undefined`, lançam `RESULT_INSTANCE_NULL` (use `throwsIfNull` antes para ter um código de domínio).
 
 ---
 

@@ -90,6 +90,45 @@ export class ResultValidator<
     return this;
   }
 
+  /**
+   * Lança quando a condição sobre a instância é verdadeira.
+   * Se a instância for null/undefined, lança RESULT_INSTANCE_NULL: a condição
+   * nunca roda sem valor (use throwsIfNull antes para ter um código de domínio).
+   */
+  throwsIf(
+    condition: (instance: NonNullable<TSource['instance']>) => boolean,
+    error: ResultValidationError = ResultErrors.EXPRESSION_TRUE,
+    exceptionFactory?: ResultExceptionFactory,
+  ): this {
+    const instance = this.source.instance;
+
+    if (instance == null) {
+      this.throwError(ResultErrors.INSTANCE_NULL, exceptionFactory);
+    }
+
+    if (condition(instance as NonNullable<TSource['instance']>)) {
+      this.throwError(error, exceptionFactory);
+    }
+
+    return this;
+  }
+
+  /**
+   * Lança quando a condição sobre a instância é falsa.
+   * Mesma regra de null/undefined que throwsIf.
+   */
+  throwsIfNot(
+    condition: (instance: NonNullable<TSource['instance']>) => boolean,
+    error: ResultValidationError = ResultErrors.EXPRESSION_FALSE,
+    exceptionFactory?: ResultExceptionFactory,
+  ): this {
+    return this.throwsIf(
+      (instance) => !condition(instance),
+      error,
+      exceptionFactory,
+    );
+  }
+
   throwsIfFailed(
     error: ResultValidationError = this.source.errors ?? ResultErrors.FAILED,
     exceptionFactory?: ResultExceptionFactory,
