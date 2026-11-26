@@ -1,4 +1,4 @@
-# @arquitetura/shared
+# @poiesis/shared
 
 Biblioteca de infraestrutura compartilhada para projetos com arquitetura orientada ao domínio. Fornece os blocos de construção do DDD — `Result`, `Entity`, `AggregateRoot`, `ValueObject`, `UseCase` — além de eventos de domínio, messaging, contratos de repositório, sistema de erros estruturados e uma biblioteca de Value Objects prontos para uso.
 
@@ -452,7 +452,7 @@ interface PaginatedResultDTO<T> {
 
 ## API pública
 
-Exportado via `@arquitetura/shared`:
+Exportado via `@poiesis/shared`:
 
 | Módulo       | Conteúdo principal                                                         |
 | ------------ | -------------------------------------------------------------------------- |
