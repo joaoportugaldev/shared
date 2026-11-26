@@ -6,68 +6,40 @@ Biblioteca de infraestrutura compartilhada para projetos com arquitetura orienta
 
 ## Como usar como submódulo
 
-Você pode instalar este repositório em `.agents` ou `.claude`, conforme o runtime/agente utilizado no projeto.
+Instale este repositório em `packages/shared`, dentro do monorepo consumidor. Execute os comandos a partir da raiz do monorepo.
 
-### Opção A: pasta `.agents`
-
-```bash
-git submodule add <URL-DESTE-REPOSITORIO> .agents/skills
-git submodule update --init --recursive
-```
-
-### Opção B: pasta `.claude`
+### Primeira instalação
 
 ```bash
-git submodule add <URL-DESTE-REPOSITORIO> .claude/skills
-git submodule update --init --recursive
+git submodule add https://github.com/joaoportugaldev/shared.git packages/shared
+git add -- .gitmodules packages/shared
+git commit -m "chore: adiciona shared como submódulo"
 ```
 
-## Atualizar skills no projeto consumidor
+O commit do monorepo registra a URL em `.gitmodules` e fixa a versão do `shared` em um commit específico. Se o monorepo usa npm workspaces, garanta que `workspaces` no `package.json` da raiz inclua `packages/shared`, diretamente ou por `packages/*`. Depois, rode `npm install` na raiz.
 
-Para atualizar o ponteiro do submódulo para a versão mais recente:
+### Em um clone do monorepo
+
+Se o submódulo já estiver registrado no monorepo, rode o comando abaixo para baixar a versão fixada em `packages/shared`.
 
 ```bash
-# Exemplo com .agents
-cd .agents/skills
-git checkout main
-git pull origin main
-cd -
-
-git add .agents/skills
-git commit -m "chore(skills): atualiza submódulo skills-ddd-clean"
+git submodule update --init --recursive -- packages/shared
 ```
 
-> Se o submódulo estiver em `.claude`, ajuste o caminho nos comandos.
+### Atualizar a versão no monorepo
 
-## Como contribuir com novas skills (a partir de outro projeto)
-
-É possível evoluir as skills diretamente do repositório consumidor (onde o submódulo está instalado):
-
-1. Entrar na pasta do submódulo.
-2. Criar uma branch no repositório de skills.
-3. Implementar/ajustar as skills.
-4. Commitar e enviar para o remoto do repositório de skills.
-5. Abrir PR e fazer merge.
-6. Voltar ao projeto consumidor e atualizar o ponteiro do submódulo.
-
-Exemplo:
+Para adotar a versão mais recente da `main` do `shared`, execute estes comandos na raiz do monorepo.
 
 ```bash
-cd .agents/skills
-git checkout -b feat/nova-skill-ou-ajuste
-# editar arquivos...
-git add .
-git commit -m "feat(skill): adiciona nova skill"
-git push -u origin feat/nova-skill-ou-ajuste
-
-# depois do merge no repo de skills
-cd .agents/skills
-git checkout main
-git pull origin main
-cd -
-git add .agents/skills
-git commit -m "chore(skills): aponta para nova versão"
+git -C packages/shared fetch origin main
+git -C packages/shared switch --detach FETCH_HEAD
+git add -- packages/shared
+git commit -m "chore: atualiza o submódulo shared"
 ```
+
+### Contribuir com o `shared` pelo monorepo
+
+Crie uma branch dentro de `packages/shared`, faça a alteração e teste no monorepo consumidor. Faça o commit e envie a branch ao repositório do `shared`, onde você abre o PR. Depois do merge, siga os passos de atualização acima para registrar a nova versão no monorepo.
 
 ---
 
