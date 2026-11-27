@@ -1,3 +1,4 @@
+export type { Actor, SystemActor, UserActor } from './actor';
 export * from './aggregate-root';
 export * from './entity';
 export * from './message';
