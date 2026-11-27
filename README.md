@@ -429,6 +429,24 @@ Token de injeção: `MESSAGE_CONSUMER`.
 
 ---
 
+## Contrato de consulta (`Query<IN, OUT>`)
+
+Contrato padrão do lado de leitura (CQRS). Cada consulta é uma interface própria com uma única operação `execute`, que recebe a entrada e devolve o resultado em `Result`.
+
+```typescript
+interface Query<IN, OUT> {
+  execute(input: IN): Promise<Result<OUT>>;
+}
+
+// Consulta paginada
+interface CartoesPaginadosQuery extends Query<PaginatedInputDTO, PaginatedResultDTO<CartaoDTO>> {}
+
+// Consulta sem paginação
+interface NomeCartaoEmUsoQuery extends Query<NomeCartaoEmUsoDTO, boolean> {}
+```
+
+---
+
 ## DTOs de paginação
 
 ```typescript
@@ -460,7 +478,7 @@ Exportado via `@poiesis/shared`:
 | `db`         | Contratos de repositório, `TransactionManager`                             |
 | `events`     | `DomainEvent`, `AbstractDomainEvent`, `OutboxEvent`, `DomainEventRepository` |
 | `messaging`  | `MessagePublisher`, `MessageConsumer`, `EventConsumer`, `BrokerMessage`    |
-| `query`      | DTOs de paginação                                                          |
+| `query`      | `Query`, DTOs de paginação                                                 |
 | `vo`         | Value Objects listados acima                                               |
 
 ---
